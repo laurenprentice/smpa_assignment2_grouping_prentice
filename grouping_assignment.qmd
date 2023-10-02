@@ -1,6 +1,6 @@
 ---
 title: "SMPA - Grouping Assignment"
-author: "YourNameHere"
+author: "Lauren Prentice"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 format:
   html:
@@ -82,7 +82,17 @@ How much was spent in the 2017 vs. 2018 reporting year?
 ```{r}
 
 
+payments %>% 
+  group_by(recipient_state) %>% 
+  summarise(total_spent = sum(disbursement_amount))
 
+payments %>% 
+  group_by(recipient_city) %>% 
+  summarise(total_spent = sum(disbursement_amount))
+
+payments %>% 
+  group_by(report_year) %>% 
+  summarise(total_spent = sum(disbursement_amount))
 
 
 
@@ -93,6 +103,14 @@ Tally the total overall disbursement amounts for each month (distinguishing betw
 
 ```{r}
 
+
+glimpse(payments)
+
+payments %>% 
+  filter(election_cycle == 2020) %>% 
+  group_by(disbursement_year, disbursement_month) %>% 
+  summarise(total_spent = sum(disbursement_amount)) %>% 
+  arrange(desc(total_spent))
 
 
 
@@ -105,6 +123,14 @@ Which recipient (recipient_name) was paid the most in the 2020 election cycle?
 ```{r}
 
 
+payments %>% 
+  group_by(recipient_name) %>% 
+  summarise(total_spent = sum(disbursement_amount)) %>% 
+  arrange(desc(total_spent))
+
+payments %>% 
+  filter(recipient_name == "AMERICAN MADE MEDIA CONSULTANTS, LLC") %>% 
+  arrange(desc(disbursement_amount))
 
 
 
@@ -116,6 +142,11 @@ Look at what this recipient was paid for. What service or good (see the "disburs
 
 ```{r}
 
+payments %>% 
+  filter(recipient_name == "AMERICAN MADE MEDIA CONSULTANTS, LLC") %>% 
+  group_by(recipient_state) %>% 
+  summarise(total_spent = sum(disbursement_amount)) %>% 
+  arrange(desc(total_spent))
 
 
 
@@ -128,6 +159,10 @@ What's the most common category overall (see "disbursement_description") the cam
 ```{r}
 
 
+payments %>% 
+  group_by(disbursement_description) %>% 
+  summarise(total_spent = sum(disbursement_amount)) %>% 
+  arrange(desc(total_spent))
 
 
 
@@ -139,6 +174,12 @@ Who were the 5 biggest recipients of campaign spending on "LEGAL CONSULTING"..?
 ```{r}
 
 
+payments %>% 
+  filter(disbursement_description == "LEGAL CONSULTING") %>% 
+  group_by(recipient_name) %>% 
+  summarise(total_spent = sum(disbursement_amount)) %>% 
+  arrange(desc(total_spent)) %>% 
+  head(5)
 
 
 
@@ -152,7 +193,12 @@ Who are the top 5 individuals (vs. organization) were paid by the campaign commi
 ```{r}
 
 
-
+payments %>% 
+  filter(entity_type == "IND") %>% 
+  group_by(recipient_name) %>% 
+  summarise(total_spent = sum(disbursement_amount)) %>% 
+  arrange(desc(total_spent)) %>% 
+  head(5)
 
 
 
@@ -165,6 +211,15 @@ For the indvidual who was paid the most, which payment category (disbursement_de
 ```{r}
 
 
+payments_glassner <- payments %>% 
+  filter(recipient_name == "GLASSNER, MICHAEL") 
+  
+payments_glassner_groupbydescription <- payments_glassner %>% 
+  group_by(disbursement_description) %>%
+  summarise(total = sum(disbursement_amount)) 
+
+payments_glassner_groupbydescription %>% 
+  arrange(desc(total))
 
 
 
