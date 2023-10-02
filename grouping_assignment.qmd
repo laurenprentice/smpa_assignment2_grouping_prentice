@@ -223,6 +223,9 @@ payments_glassner_groupbydescription <- payments_glassner %>%
 payments_glassner_groupbydescription %>% 
   arrange(desc(total))
 
+#finally figured the assignment out!
+  
+
 
 
 
