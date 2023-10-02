@@ -181,6 +181,8 @@ payments %>%
   arrange(desc(total_spent)) %>% 
   head(5)
 
+# This question was a little bit harder, but I got it down. 
+
 
 
 
